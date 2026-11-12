@@ -114,9 +114,6 @@ def quick_picks(models: list, tol: dict) -> list:
         med = statistics.median(p[1]["intelligence"] for p in scored)
         found.append(("budget", "Budget", f"Cheapest that scores above the median ({med:.0f})",
                       min((p for p in scored if p[1]["intelligence"] >= med), key=lambda p: p[1]["cost"])))
-    if full and max(beats.values(), default=0) > 0:
-        found.append(("dominant", "Most dominant", "Beats the most other variants on all three measures",
-                      max(full, key=lambda p: (beats[p[1]["slug"]], p[1]["intelligence"]))))
 
     out: dict = {}
     for pid, label, why, (m, v) in found:
@@ -290,6 +287,9 @@ def build_latest(snapshots: list, last_checked: dict, slate: dict, axes: dict,
         "models": models,
         "health": health,
         "quick_picks": quick_picks(models, tol),
+        # The same picks within each plan, in slate order (allowances are per plan).
+        "plan_picks": [{"plan": sub, "picks": quick_picks([mm for mm in models if mm["subscription"] == sub], tol)}
+                       for sub in dict.fromkeys(mm["subscription"] for mm in models)],
     }
 
 

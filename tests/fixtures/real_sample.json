@@ -1,5 +1,5 @@
 {
- "_comment": "Trimmed real AA records for the slate, from the 2026-11-12 evening snapshot (includes Gemini 4 Hydrogen). Used to check field paths and naming against reality.",
+ "_comment": "Trimmed real AA records for the slate, from the 2026-11-12 evening snapshot (includes Gemini 4 Hydrogen; Gemini 3.5 Flash-Lite removed). Used to check field paths and naming against reality.",
  "meta": {
   "tier": "free",
   "intelligence_index_version": 5
@@ -558,43 +558,6 @@
     "price_1m_output_tokens": 10,
     "price_1m_cache_hit_tokens": 0.1,
     "price_1m_cache_write_tokens": 2.5
-   }
-  },
-  {
-   "slug": "gemini-3-5-flash-lite",
-   "name": "Gemini 3.5 Flash-Lite",
-   "release_date": "2026-07-21",
-   "model_creator": {
-    "id": "faddc6d9-2c14-445f-9b28-56726f59c793",
-    "name": "Google"
-   },
-   "evaluations": {
-    "artificial_analysis_intelligence_index": 11.7,
-    "artificial_analysis_coding_index": null,
-    "artificial_analysis_agentic_index": null,
-    "artificial_analysis_finance_and_accounting_index": 23.3,
-    "artificial_analysis_strategy_and_ops_index": 20.7,
-    "artificial_analysis_legal_index": 23.9,
-    "artificial_analysis_healthcare_and_medical_index": 20.5,
-    "artificial_analysis_engineering_index": 21.2,
-    "artificial_analysis_economics_index": 21.9
-   },
-   "artificial_analysis_intelligence_index_cost": {
-    "total_cost": 653.82,
-    "cost_per_task": {
-     "total_cost": 0.6929
-    }
-   },
-   "performance_v3": {
-    "mean_output_tokens_per_second": 295.74,
-    "mean_time_to_first_token_seconds": 4.58,
-    "mean_time_to_first_answer_token_seconds": 4.58
-   },
-   "pricing": {
-    "price_1m_input_tokens": 0.3,
-    "price_1m_output_tokens": 2.5,
-    "price_1m_cache_hit_tokens": 0.03,
-    "price_1m_cache_write_tokens": null
    }
   },
   {

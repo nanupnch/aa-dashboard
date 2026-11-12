@@ -2,6 +2,7 @@
 /* AI Model Lineup — reads data/latest.json and data/changes.json, draws everything with inline SVG. */
 
 const SUBS = { 'ChatGPT Plus': 'chatgpt', 'Claude Pro': 'claude', 'Google AI Pro': 'google' };
+const PLAN_KEY = 'aa-dashboard:picks-plan';
 const LANES = [
   { key: 'intelligence', title: 'Smarter', tip: 'Intelligence Index' },
   { key: 'cost', title: 'Cheaper', tip: 'Cost per task (log scale)' },
@@ -10,7 +11,7 @@ const LANES = [
 const MEASURE = { intelligence: 'Intelligence', cost: 'Cost/task', time: 'Wait' };
 const X0 = 0.06, X1 = 0.94; // lane padding so edge dots stay inside
 
-const state = { data: null, events: [], effort: null, sortBy: null, tradeX: 'cost', allChanges: false, showBeaten: false, focus: null, minScore: null, maxTime: null };
+const state = { picksPlan: 'overall', data: null, events: [], effort: null, sortBy: null, tradeX: 'cost', allChanges: false, showBeaten: false, focus: null, minScore: null, maxTime: null };
 
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -565,11 +566,18 @@ function clearThresholds() {
 }
 
 /* ---------- quick picks ---------- */
-const PICK_SHORT = { smartest: 'Smartest', value: 'Value', fast: 'Fast+smart', budget: 'Budget', dominant: 'Dominant' };
+const PICK_SHORT = { smartest: 'Smartest', value: 'Value', fast: 'Fast+smart', budget: 'Budget' };
 function renderPicks() {
-  // One compact row per winning variant: labels | model + effort | score · cost · wait (aligned columns).
-  const qp = state.data.quick_picks || [];
-  $('#picks-sec').hidden = !qp.length;
+  // Overall, or within one plan (allowances are per plan). One compact row per winning variant:
+  // labels | model + effort | score · cost · wait (aligned columns).
+  const plans = state.data.plan_picks || [];
+  if (!plans.some((p) => p.plan === state.picksPlan)) state.picksPlan = 'overall';
+  const tabs = [{ id: 'overall', label: 'Overall', title: 'All plans' },
+    ...plans.map((p) => ({ id: p.plan, label: p.plan.split(' ')[0], title: p.plan, sk: subKey(p.plan) }))];
+  $('#picks-plan').hidden = !plans.length;
+  $('#picks-plan').innerHTML = tabs.map((t) => `<button type="button" data-plan="${esc(t.id)}" aria-pressed="${t.id === state.picksPlan}" title="${esc(t.title)}"${t.sk ? ` style="--c:var(--${t.sk})"` : ''}>${t.sk ? '<span class="pbar" aria-hidden="true"></span>' : ''}${esc(t.label)}</button>`).join('');
+  const qp = (state.picksPlan === 'overall' ? state.data.quick_picks : plans.find((p) => p.plan === state.picksPlan).picks) || [];
+  $('#picks-sec').hidden = !(state.data.quick_picks || []).length;
   $('#picks').innerHTML = qp.map((e) => {
     const m = state.data.models.find((x) => x.key === e.model);
     const v = m && m.variants.find((x) => x.slug === e.slug);
@@ -668,6 +676,13 @@ function wire() {
     });
   }
   $('#beaten').addEventListener('click', () => { state.showBeaten = !state.showBeaten; renderLineup(); renderTradeoff(); });
+  $('#picks-plan').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-plan]');
+    if (!b) return;
+    state.picksPlan = b.dataset.plan;
+    try { localStorage.setItem(PLAN_KEY, state.picksPlan); } catch (_) { /* no storage */ }
+    renderPicks();
+  });
   $('#picks').addEventListener('click', (e) => { const p = e.target.closest('.pick'); if (p) openDetail(p.dataset.key); });
   $('#more-changes').addEventListener('click', () => { state.allChanges = true; renderChanges(); });
   const dlg = $('#detail');
@@ -684,6 +699,7 @@ function wire() {
 
 async function main() {
   wire();
+  try { state.picksPlan = localStorage.getItem(PLAN_KEY) || 'overall'; } catch (_) { /* no storage */ }
   try {
     const [latest, changes] = await Promise.all([
       fetch('data/latest.json', { cache: 'no-cache' }).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }),

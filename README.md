@@ -45,7 +45,7 @@ Design: [docs/DESIGN.md](docs/DESIGN.md).
 ## Development
 
 ```bash
-python3 -m unittest discover -s tests             # 35 tests, standard library only
+python3 -m unittest discover -s tests             # 49 tests, standard library only
 python3 scripts/build.py --demo                   # synthetic data -> site/data (preview only)
 python3 -m http.server -d site 8765
 python3 tests/fixtures/make_fixtures.py           # regenerate synthetic fixtures

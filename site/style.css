@@ -303,6 +303,11 @@ svg .thresh-line { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 4 3;
 /* Quick picks: one compact row per variant, values in the same order as the lanes */
 #picks-sec { margin-top: 16px; }
 #picks-sec h2 { margin-bottom: 6px; }
+#picks-sec .section-head { margin-bottom: 6px; }
+#picks-sec .section-head h2 { margin: 0; }
+.plan-seg { max-width: 100%; overflow-x: auto; }
+.plan-seg button { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; padding: 4px 10px; min-height: 30px; }
+.plan-seg .pbar { width: 3px; height: 12px; border-radius: 2px; background: var(--c); }
 .picks { display: grid; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
 .pick {
   font: inherit; color: var(--ink); text-align: left; cursor: pointer; background: none; border: 0;

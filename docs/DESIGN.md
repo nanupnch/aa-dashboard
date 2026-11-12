@@ -6,7 +6,7 @@ Nov 12, 2026 · supersedes the v1 design doc
 
 **The decision this serves:** "For this task, which model and effort should I use without wasting my subscription allowance?"
 
-Everything on the page exists to answer that question, for the 10 models unlocked by ChatGPT Plus, Claude Pro and Google AI Pro. Data comes from the Artificial Analysis (AA) free API. The page is a static site on GitHub Pages, refreshed by a GitHub Actions job every day before 3 pm local time. It costs nothing.
+Everything on the page exists to answer that question, for the 9 models unlocked by ChatGPT Plus, Claude Pro and Google AI Pro. Data comes from the Artificial Analysis (AA) free API. The page is a static site on GitHub Pages, refreshed by a GitHub Actions job every day before 3 pm local time. It costs nothing.
 
 ### Design principles
 
@@ -32,7 +32,7 @@ Everything on the page exists to answer that question, for the 10 models unlocke
 
 ## 2. Scope
 
-**In scope:** 10 language models (the table below), every effort variant AA lists, and three measures: intelligence, cost per task, and time.
+**In scope:** 9 language models (the table below; Gemini 3.5 Flash-Lite was dropped Nov 12), every effort variant AA lists, and three measures: intelligence, cost per task, and time.
 
 | Subscription | Model | Tier |
 | --- | --- | --- |
@@ -45,7 +45,8 @@ Everything on the page exists to answer that question, for the 10 models unlocke
 | Claude Pro | Claude Haiku 5.5 | Small |
 | Google AI Pro | Gemini 4 Argon | Flagship |
 | Google AI Pro | Gemini 4 Hydrogen | Mid (added Nov 12: Flash-class, "Everyday help" in the Gemini app picker) |
-| Google AI Pro | Gemini 3.5 Flash-Lite | Small |
+
+**Quick picks per plan** (added Nov 12): tabs above Quick picks switch between Overall and each plan (ChatGPT Plus, Claude Pro, Google AI Pro). Each plan's picks are computed only from that plan's models (`plan_picks` in `latest.json`), because allowances are per plan. The chosen tab is remembered per browser.
 
 **Out of scope:** non-text models; measuring your own usage or limits; privacy (the site and repository are public); output size; the Pro key.
 
@@ -98,7 +99,7 @@ The key exists only as a repository secret, and the browser loads only pre-built
 aa-dashboard/
   .github/workflows/daily.yml
   config/
-    slate.json          10 models, pinned slugs, notes
+    slate.json          9 models, pinned slugs, notes
     axes.json           fixed axis ranges per index major version
     settings.json       tolerances, tracked creators, effort order
   data/
@@ -306,9 +307,8 @@ Cards for the variants that clearly win a common trade-off. They are computed in
 | Best value | Knee of the global intelligence-vs-log-cost Pareto frontier (Kneedle-style: largest normalised gap above the line joining the frontier's ends). Points within the score tolerance of the best knee, as a fraction of the frontier's score range, count as tied; the cheapest wins. |
 | Fast & smart | Same knee on intelligence vs log wait; among ties, the fastest |
 | Budget | Cheapest variant scoring at or above the median |
-| Most dominant | Beats the most other variants on all three measures (all plans, with tolerances) |
 
-A variant that wins several picks gets one row with all its labels. The section is a compact list, one row per variant: short labels (Smartest, Value, Fast+smart, Budget, Dominant) | model + effort | score · cost · wait, in lane order. On phones the labels move onto their own line. The reasons and the "beats N" count are in the row's hover text; tapping a row opens the detail panel. On the first real data: Smartest = Opus 5.5 XHigh; GPT-6.1 Sol Medium = Best value, Fast & smart and Most dominant (beats 6); Budget = GPT-6.1 Terra High. After Gemini 3.8 Flash left the slate, Most dominant moved to GPT-6.1 Terra Low, since Sol Medium's count had included Flash variants.
+A variant that wins several picks gets one row with all its labels. The section is a compact list, one row per variant: short labels (Smartest, Value, Fast+smart, Budget) | model + effort | score · cost · wait, in lane order. On phones the labels move onto their own line. The reasons and the "beats N" count are in the row's hover text; tapping a row opens the detail panel. On the first real data: Smartest = Opus 5.5 XHigh; GPT-6.1 Sol Medium = Best value, Fast & smart and Most dominant (beats 6); Budget = GPT-6.1 Terra High. A fifth pick, Most dominant (beats the most other variants on all three measures), was dropped on Nov 12; the "beats N" count stays in the hover text.
 
 ### 7.2 Below the Lineup
 

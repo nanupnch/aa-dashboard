@@ -69,11 +69,26 @@ class RealSample(unittest.TestCase):
         self.assertEqual(picks["smartest"], "claude-opus-5-5-xhigh")   # 57.4; Max (59.1) merged into it
         self.assertEqual(picks["value"], "gpt-6-1-sol-medium")         # flat cost knee; cheapest within noise
         self.assertEqual(picks["fast"], "gpt-6-1-sol-medium")
-        self.assertEqual(picks["dominant"], "gpt-6-1-terra-low")          # after 3.8 Flash left the slate
+        self.assertNotIn("dominant", picks)                              # dropped Nov 12
         self.assertEqual(picks["budget"], "gpt-6-1-terra-high")
         sol = next(e for e in latest["quick_picks"] if e["slug"] == "gpt-6-1-sol-medium")
         self.assertEqual(len(sol["picks"]), 2)                          # one row, two labels
         self.assertGreater(sol["beats"], 0)
+
+    def test_plan_picks_on_real_data(self):
+        # Picks within each plan, from that plan's models only.
+        snap = {"intelligence_index_version": self.meta["intelligence_index_version"], "tier": "free",
+                "fetched_at": "2026-11-12T19:00:00Z", "records": self.records}
+        latest = build.build_latest([("2026-11-12", snap)], {}, SLATE, AXES, SETTINGS)
+        plans = {p["plan"]: {x["id"]: e["slug"] for e in p["picks"] for x in e["picks"]} for p in latest["plan_picks"]}
+        self.assertEqual(list(plans), ["ChatGPT Plus", "Claude Pro", "Google AI Pro"])
+        self.assertEqual(plans["ChatGPT Plus"]["smartest"], "gpt-6-astra")
+        self.assertEqual(plans["Claude Pro"]["smartest"], "claude-opus-5-5-xhigh")
+        self.assertEqual(plans["Claude Pro"]["value"], "claude-haiku-5-5-high")
+        self.assertEqual(plans["Google AI Pro"]["smartest"], "gemini-4-hydrogen")
+        subs = {m["key"]: m["subscription"] for m in latest["models"]}
+        for p in latest["plan_picks"]:
+            self.assertTrue(all(subs[e["model"]] == p["plan"] for e in p["picks"]))
 
 if __name__ == "__main__":
     unittest.main()
