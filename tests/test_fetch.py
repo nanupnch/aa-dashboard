@@ -1,4 +1,6 @@
+import contextlib
 import copy
+import io
 import shutil
 import sys
 import tempfile
@@ -12,6 +14,12 @@ import fetch  # noqa: E402
 
 FX = Path(__file__).resolve().parent / "fixtures"
 SETTINGS = aa.read_json(aa.CONFIG_DIR / "settings.json")
+
+
+def quiet(fn, *args, **kwargs):
+    """Run without printing: fetch.py's "::error::" lines would become CI error annotations."""
+    with contextlib.redirect_stdout(io.StringIO()):
+        return fn(*args, **kwargs)
 
 
 def response():
@@ -71,7 +79,7 @@ class FetchRun(unittest.TestCase):
 
     def run_at(self, iso, force=False):
         now = datetime.fromisoformat(iso).replace(tzinfo=timezone.utc)
-        return fetch.run(force, self.data, self.cfg, "key", now=now, fetcher=self.fetcher)
+        return quiet(fetch.run, force, self.data, self.cfg, "key", now=now, fetcher=self.fetcher)
 
     def test_snapshot_only_on_change_and_daily_guard(self):
         self.assertEqual(self.run_at("2026-11-11T21:43:00"), 0)
@@ -98,14 +106,14 @@ class FetchRun(unittest.TestCase):
     def test_api_error_writes_nothing(self):
         def bad(key):
             raise aa.ApiError(401, "nope")
-        rc = fetch.run(False, self.data, self.cfg, "key",
-                       now=datetime(2026, 11, 11, 21, 43, tzinfo=timezone.utc), fetcher=bad)
+        rc = quiet(fetch.run, False, self.data, self.cfg, "key",
+                   now=datetime(2026, 11, 11, 21, 43, tzinfo=timezone.utc), fetcher=bad)
         self.assertEqual(rc, 1)
         self.assertFalse(self.data.exists())
 
     def test_missing_key(self):
-        rc = fetch.run(False, self.data, self.cfg, None,
-                       now=datetime(2026, 11, 11, 21, 43, tzinfo=timezone.utc), fetcher=self.fetcher)
+        rc = quiet(fetch.run, False, self.data, self.cfg, None,
+                   now=datetime(2026, 11, 11, 21, 43, tzinfo=timezone.utc), fetcher=self.fetcher)
         self.assertEqual(rc, 1)
         self.assertEqual(self.calls, 0)
 
