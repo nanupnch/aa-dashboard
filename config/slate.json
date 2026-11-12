@@ -11,6 +11,7 @@
     {"key": "claude-sonnet-5-5", "display_name": "Claude Sonnet 5.5", "subscription": "Claude Pro", "tier_role": "Mid", "aa_name": "Claude Sonnet 5.5", "slugs": ["claude-sonnet-5-5-low", "claude-sonnet-5-5-medium", "claude-sonnet-5-5-high", "claude-sonnet-5-5-xhigh", "claude-sonnet-5-5"], "my_notes": ""},
     {"key": "claude-haiku-5-5", "display_name": "Claude Haiku 5.5", "subscription": "Claude Pro", "tier_role": "Small", "aa_name": "Claude Haiku 5.5", "slugs": ["claude-haiku-5-5-low", "claude-haiku-5-5-medium", "claude-haiku-5-5-high", "claude-haiku-5-5-xhigh", "claude-haiku-5-5"], "my_notes": ""},
     {"key": "gemini-4-argon", "display_name": "Gemini 4 Argon", "subscription": "Google AI Pro", "tier_role": "Flagship", "aa_name": "Gemini 4 Argon", "slugs": ["gemini-4-argon"], "my_notes": ""},
+    {"key": "gemini-4-hydrogen", "display_name": "Gemini 4 Hydrogen", "subscription": "Google AI Pro", "tier_role": "Mid", "aa_name": "Gemini 4 Hydrogen", "slugs": ["gemini-4-hydrogen-low", "gemini-4-hydrogen-medium", "gemini-4-hydrogen-high", "gemini-4-hydrogen"], "my_notes": ""},
     {"key": "gemini-3-8-flash", "display_name": "Gemini 3.8 Flash", "subscription": "Google AI Pro", "tier_role": "Mid", "aa_name": "Gemini 3.8 Flash", "slugs": ["gemini-3-8-flash-low", "gemini-3-8-flash-medium", "gemini-3-8-flash"], "my_notes": ""},
     {"key": "gemini-3-5-flash-lite", "display_name": "Gemini 3.5 Flash-Lite", "subscription": "Google AI Pro", "tier_role": "Small", "aa_name": "Gemini 3.5 Flash-Lite", "slugs": ["gemini-3-5-flash-lite"], "my_notes": ""}
   ]

@@ -42,7 +42,7 @@ class RealSample(unittest.TestCase):
                 "fetched_at": "2026-11-12T19:00:00Z", "records": self.records}
         latest = build.build_latest([("2026-11-12", snap)], {}, SLATE, AXES, SETTINGS)
         build.validate(latest)
-        self.assertEqual(len(latest["models"]), 10)
+        self.assertEqual(len(latest["models"]), len(SLATE["models"]))
         self.assertFalse([w for w in latest["health"]["warnings"] if "off scale" in w])
         self.assertEqual(latest["health"]["unconfirmed"], [])
 

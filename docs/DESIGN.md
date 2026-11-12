@@ -44,6 +44,7 @@ Everything on the page exists to answer that question, for the 10 models unlocke
 | Claude Pro | Claude Sonnet 5.5 | Mid |
 | Claude Pro | Claude Haiku 5.5 | Small |
 | Google AI Pro | Gemini 4 Argon | Flagship |
+| Google AI Pro | Gemini 4 Hydrogen | Mid (added Nov 12: Flash-class, "Everyday help" in the Gemini app picker) |
 | Google AI Pro | Gemini 3.8 Flash | Mid |
 | Google AI Pro | Gemini 3.5 Flash-Lite | Small |
 
