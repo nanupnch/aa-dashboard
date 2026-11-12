@@ -26,8 +26,8 @@ class RealSample(unittest.TestCase):
 
     def test_field_paths_resolve(self):
         missing = [(r["slug"], k) for r in self.records for k, v in aa.measures_of(r).items() if v is None]
-        # Only known gap at capture time: Gemini 3.8 Flash (Low) has no cost per task.
-        self.assertEqual(missing, [("gemini-3-8-flash-low", "cost")])
+        # No gaps for the current slate at capture time (Gemini 3.8 Flash Low, which lacked cost, was removed).
+        self.assertEqual(missing, [])
         for r in self.records:
             self.assertIsNotNone(aa.creator_of(r))
             self.assertIsNotNone(aa.get_path(r, aa.FIELDS["price_input"]))
@@ -54,7 +54,6 @@ class RealSample(unittest.TestCase):
         merged = {v["slug"]: v["merged_into"] for m in latest["models"] for v in m["variants"] if v["merged_into"]}
         self.assertEqual(merged["gpt-6-astra-xhigh"], "gpt-6-astra-high")         # 55.3 vs 54.8
         self.assertEqual(merged["claude-opus-5-5"], "claude-opus-5-5-xhigh")       # 59.1 vs 57.4
-        self.assertEqual(merged["gemini-3-8-flash"], "gemini-3-8-flash-medium")    # 30.8 vs 30.1
         self.assertEqual(merged["gpt-6-luna-non-reasoning"], "gpt-6-luna-low")     # 9.4 vs 9.7, Low cheaper
         self.assertNotIn("gpt-6-1-sol", merged)                                    # steps of 2.1+ points
         for m in latest["models"]:
@@ -70,10 +69,10 @@ class RealSample(unittest.TestCase):
         self.assertEqual(picks["smartest"], "claude-opus-5-5-xhigh")   # 57.4; Max (59.1) merged into it
         self.assertEqual(picks["value"], "gpt-6-1-sol-medium")         # flat cost knee; cheapest within noise
         self.assertEqual(picks["fast"], "gpt-6-1-sol-medium")
-        self.assertEqual(picks["dominant"], "gpt-6-1-sol-medium")
+        self.assertEqual(picks["dominant"], "gpt-6-1-terra-low")          # after 3.8 Flash left the slate
         self.assertEqual(picks["budget"], "gpt-6-1-terra-high")
         sol = next(e for e in latest["quick_picks"] if e["slug"] == "gpt-6-1-sol-medium")
-        self.assertEqual(len(sol["picks"]), 3)                          # one card, three labels
+        self.assertEqual(len(sol["picks"]), 2)                          # one row, two labels
         self.assertGreater(sol["beats"], 0)
 
 if __name__ == "__main__":

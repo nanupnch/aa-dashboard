@@ -45,7 +45,6 @@ Everything on the page exists to answer that question, for the 10 models unlocke
 | Claude Pro | Claude Haiku 5.5 | Small |
 | Google AI Pro | Gemini 4 Argon | Flagship |
 | Google AI Pro | Gemini 4 Hydrogen | Mid (added Nov 12: Flash-class, "Everyday help" in the Gemini app picker) |
-| Google AI Pro | Gemini 3.8 Flash | Mid |
 | Google AI Pro | Gemini 3.5 Flash-Lite | Small |
 
 **Out of scope:** non-text models; measuring your own usage or limits; privacy (the site and repository are public); output size; the Pro key.
@@ -309,7 +308,7 @@ Cards for the variants that clearly win a common trade-off. They are computed in
 | Budget | Cheapest variant scoring at or above the median |
 | Most dominant | Beats the most other variants on all three measures (all plans, with tolerances) |
 
-A variant that wins several picks gets one row with all its labels. The section is a compact list, one row per variant: short labels (Smartest, Value, Fast+smart, Budget, Dominant) | model + effort | score · cost · wait, in lane order. On phones the labels move onto their own line. The reasons and the "beats N" count are in the row's hover text; tapping a row opens the detail panel. On the first real data: Smartest = Opus 5.5 XHigh; GPT-6.1 Sol Medium = Best value, Fast & smart and Most dominant (beats 6); Budget = GPT-6.1 Terra High.
+A variant that wins several picks gets one row with all its labels. The section is a compact list, one row per variant: short labels (Smartest, Value, Fast+smart, Budget, Dominant) | model + effort | score · cost · wait, in lane order. On phones the labels move onto their own line. The reasons and the "beats N" count are in the row's hover text; tapping a row opens the detail panel. On the first real data: Smartest = Opus 5.5 XHigh; GPT-6.1 Sol Medium = Best value, Fast & smart and Most dominant (beats 6); Budget = GPT-6.1 Terra High. After Gemini 3.8 Flash left the slate, Most dominant moved to GPT-6.1 Terra Low, since Sol Medium's count had included Flash variants.
 
 ### 7.2 Below the Lineup
 
