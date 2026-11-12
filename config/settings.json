@@ -1,0 +1,15 @@
+{
+  "effort_order": ["non-reasoning", "minimal", "low", "medium", "high", "xhigh", "max"],
+  "effort_aliases": {
+    "x-high": "xhigh",
+    "extra high": "xhigh",
+    "extra-high": "xhigh",
+    "med": "medium",
+    "maximum": "max"
+  },
+  "tolerance": { "intelligence_abs": 2, "cost_rel": 0.10, "time_rel": 0.20 },
+  "tracked_creators": ["OpenAI", "Anthropic", "Google"],
+  "candidate_window_days": 120,
+  "stale_hours": { "amber": 36, "red": 72 },
+  "timezone": "America/Los_Angeles"
+}

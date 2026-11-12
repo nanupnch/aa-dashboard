@@ -1,0 +1,8 @@
+{
+  "_comment": "Fixed axis ranges per Intelligence Index major version. Set 2026-11-12 from the step-0 spike (observed: intelligence 9.4-59.1, cost $0.0051-$10.04, wait 1.7-362 s) with headroom.",
+  "5": {
+    "intelligence": { "min": 5, "max": 70 },
+    "cost": { "min": 0.003, "max": 30 },
+    "time": { "min": 1, "max": 900 }
+  }
+}

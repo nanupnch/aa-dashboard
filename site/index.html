@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>AI Model Lineup</title>
+<meta name="description" content="Intelligence, cost per task and speed for the models in ChatGPT Plus, Claude Pro and Google AI Pro, from Artificial Analysis data.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='4' cy='8' r='3' fill='%23009E73'/%3E%3Ccircle cx='9' cy='8' r='3' fill='%23D55E00'/%3E%3Ccircle cx='13' cy='8' r='2.5' fill='%230072B2'/%3E%3C/svg%3E">
+</head>
+<body>
+<header class="top">
+  <h1>AI Model Lineup</h1>
+  <p class="meta"><span id="badge" class="badge" role="status">…</span><span id="meta"></span><span id="demo" class="demo" hidden>demo data</span></p>
+</header>
+
+<main>
+  <section id="picks-sec" aria-labelledby="picks-h" hidden>
+    <h2 id="picks-h">Quick picks</h2>
+    <div id="picks" class="picks"></div>
+  </section>
+
+  <section aria-label="Lineup">
+    <div class="controls">
+      <div class="pickers">
+        <div class="ctl" id="effort-ctl" role="group" aria-label="Effort">
+          <span class="ctl-k">Effort</span>
+          <div class="seg" id="efforts"></div>
+          <span class="ctl-end"></span>
+        </div>
+        <div class="ctl thresh" data-th="score" role="group" aria-label="Minimum score" title="Good enough: each model's cheapest effort scoring at least this">
+          <span class="ctl-k">Score ≥</span>
+          <div class="ctl-body">
+            <input class="th-range" type="range" min="0" step="1" value="0" aria-label="Minimum score slider">
+            <button type="button" class="step" data-step="-1" aria-label="Lower minimum score">−</button>
+            <label class="num"><input class="th-num" type="number" inputmode="decimal" step="0.1" placeholder="any" aria-label="Minimum score"></label>
+            <button type="button" class="step" data-step="1" aria-label="Raise minimum score">+</button>
+          </div>
+          <span class="ctl-end"><button type="button" class="reset" aria-label="Reset minimum score" title="Reset" hidden>✕</button></span>
+        </div>
+        <div class="ctl thresh" data-th="time" role="group" aria-label="Maximum wait in seconds" title="Good enough: each model's cheapest effort that answers within this many seconds">
+          <span class="ctl-k">Wait ≤</span>
+          <div class="ctl-body">
+            <input class="th-range" type="range" min="0" step="1" value="0" aria-label="Maximum wait slider">
+            <button type="button" class="step" data-step="-1" aria-label="Lower maximum wait">−</button>
+            <label class="num"><input class="th-num" type="number" inputmode="decimal" step="0.01" placeholder="any" aria-label="Maximum wait, seconds"><span class="unit" aria-hidden="true">s</span></label>
+            <button type="button" class="step" data-step="1" aria-label="Raise maximum wait">+</button>
+          </div>
+          <span class="ctl-end"><button type="button" class="reset" aria-label="Reset maximum wait" title="Reset" hidden>✕</button></span>
+        </div>
+      </div>
+      <div class="key legend">
+        <div class="krow"><span class="ctl-k">Plan</span><span id="plans" class="plans" aria-hidden="true"></span></div>
+        <div class="krow" aria-hidden="true"><span class="ctl-k">Dots</span>
+          <span class="kitems">
+            <span class="k"><svg width="16" height="14"><circle cx="8" cy="7" r="5.5" class="kdot"/></svg>selected</span>
+            <span class="k"><svg width="34" height="14"><line x1="4" x2="30" y1="7" y2="7" class="kline"/><circle cx="4" cy="7" r="3.5" class="kdot"/><circle cx="17" cy="7" r="3.5" class="kdot"/><circle cx="30" cy="7" r="3.5" class="kdot"/></svg>other efforts</span>
+          </span>
+        </div>
+        <div class="krow"><span class="ctl-k">Beaten</span>
+          <span class="kitems">
+            <button id="beaten" class="k ktoggle" type="button" aria-pressed="false" title="Show or hide beaten variants"><svg width="16" height="14" aria-hidden="true"><circle cx="8" cy="7" r="5" class="khollow"/></svg>beaten <span id="beaten-n" class="n"></span></button>
+            <button id="beaten-info" class="info" type="button" aria-label="What does beaten mean?" aria-describedby="beaten-def">i</button>
+            <span id="beaten-def" hidden>Another effort on the same plan is at least as smart, cheap and fast, and clearly better on one of them. Differences within 2 points, 10% cost or 20% wait count as equal.</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div id="lineup" class="lineup"></div>
+  </section>
+
+  <section id="changes-sec" aria-labelledby="changes-h" hidden>
+    <h2 id="changes-h">Changes</h2>
+    <div id="changes"></div>
+    <button id="more-changes" class="link-btn" type="button" hidden>All</button>
+  </section>
+
+  <section aria-labelledby="trade-h">
+    <div class="section-head">
+      <h2 id="trade-h">Trade-offs</h2>
+      <div class="seg" id="trade-x" role="group" aria-label="Horizontal axis">
+        <button type="button" data-x="cost" aria-pressed="true">Cost</button>
+        <button type="button" data-x="time" aria-pressed="false">Wait</button>
+      </div>
+    </div>
+    <div id="trade-key" class="key trade-key"></div>
+    <div id="tradeoff" class="chart"></div>
+  </section>
+
+  <section id="health-sec" aria-labelledby="health-h" hidden>
+    <h2 id="health-h">Needs attention <span id="health-count" class="count"></span></h2>
+    <ul id="health" class="health"></ul>
+  </section>
+</main>
+
+<footer class="foot">
+  <p id="foot-line">Data: <a href="https://artificialanalysis.ai/" rel="noopener">Artificial Analysis</a></p>
+  <details>
+    <summary>Notes</summary>
+    <ul>
+      <li>Cost per task ≈ allowance use; compare within a plan only.</li>
+      <li>Wait = API time to first answer token, from one US region.</li>
+      <li>≈ = tie within noise (±2 points, ±10% cost, ±20% wait).</li>
+      <li>Index versions aren't comparable.</li>
+      <li>Benchmarks aren't your work.</li>
+    </ul>
+  </details>
+</footer>
+
+<dialog id="detail" aria-labelledby="detail-h">
+  <div class="dlg-head">
+    <h2 id="detail-h"></h2>
+    <button type="button" class="close" aria-label="Close">✕</button>
+  </div>
+  <div class="dlg-body"></div>
+</dialog>
+
+<div id="tip" class="tip" role="tooltip" hidden></div>
+
+<noscript><p class="noscript">Needs JavaScript. Raw data: <a href="data/latest.json">data/latest.json</a>.</p></noscript>
+<script src="app.js"></script>
+</body>
+</html>

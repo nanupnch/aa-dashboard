@@ -1,0 +1,71 @@
+name: daily-refresh
+
+on:
+  schedule:
+    # UTC times covering both Pacific offsets; fetch.py skips if already checked today (Pacific).
+    # PDT: 14:43, 15:43, 16:43   PST: 13:43, 14:43, 15:43  -> always fresh before 3 pm Pacific.
+    - cron: '43 21 * * *'
+    - cron: '43 22 * * *'
+    - cron: '43 23 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Re-fetch even if already checked today
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fetch
+        id: fetch
+        run: python scripts/fetch.py ${{ inputs.force && '--force' || '' }}
+        env:
+          AA_API_KEY: ${{ secrets.AA_API_KEY }}
+
+      - name: Test and build
+        if: steps.fetch.outputs.skip != 'true'
+        run: |
+          python -m unittest discover -s tests
+          python scripts/build.py
+
+      - name: Commit data
+        if: steps.fetch.outputs.skip != 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data
+          git commit -m "data: $(date -u +%F)" || echo 'no changes'
+          git pull --rebase
+          git push
+
+      - if: steps.fetch.outputs.skip != 'true'
+        uses: actions/configure-pages@v5
+
+      - if: steps.fetch.outputs.skip != 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - if: steps.fetch.outputs.skip != 'true'
+        id: deploy
+        uses: actions/deploy-pages@v4

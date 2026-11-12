@@ -1,0 +1,17 @@
+{
+  "_comment": "The models on the dashboard. 'slugs' are pinned by hand (run scripts/discover.py). A row matches when its name equals aa_name or starts with aa_name + ' (', so 'GPT-6 Sol' cannot match 'GPT-6.1 Sol (High)'.",
+  "_ignored_comment": "Models deliberately left off the slate; the new-model check skips them.",
+  "ignored": ["GPT-6 Sol", "Claude Fable 5.2", "GPT-5.6 Sol", "Gemini 3.1 Pro", "Gemini Deep Think", "Claude Mythos 5.2"],
+  "models": [
+    {"key": "gpt-6-astra", "display_name": "GPT-6 Astra", "subscription": "ChatGPT Plus", "tier_role": "Largest", "aa_name": "GPT-6 Astra", "slugs": ["gpt-6-astra-low", "gpt-6-astra-medium", "gpt-6-astra-high", "gpt-6-astra-xhigh", "gpt-6-astra"], "my_notes": ""},
+    {"key": "gpt-6-1-sol", "display_name": "GPT-6.1 Sol", "subscription": "ChatGPT Plus", "tier_role": "Flagship", "aa_name": "GPT-6.1 Sol", "slugs": ["gpt-6-1-sol-low", "gpt-6-1-sol-medium", "gpt-6-1-sol-high", "gpt-6-1-sol-xhigh", "gpt-6-1-sol"], "my_notes": ""},
+    {"key": "gpt-6-1-terra", "display_name": "GPT-6.1 Terra", "subscription": "ChatGPT Plus", "tier_role": "Mid", "aa_name": "GPT-6.1 Terra", "slugs": ["gpt-6-1-terra-non-reasoning", "gpt-6-1-terra-low", "gpt-6-1-terra-medium", "gpt-6-1-terra-high", "gpt-6-1-terra-xhigh", "gpt-6-1-terra"], "my_notes": ""},
+    {"key": "gpt-6-luna", "display_name": "GPT-6 Luna", "subscription": "ChatGPT Plus", "tier_role": "Small", "aa_name": "GPT-6 Luna", "slugs": ["gpt-6-luna-non-reasoning", "gpt-6-luna-low", "gpt-6-luna-medium", "gpt-6-luna-high", "gpt-6-luna-xhigh", "gpt-6-luna"], "my_notes": ""},
+    {"key": "claude-opus-5-5", "display_name": "Claude Opus 5.5", "subscription": "Claude Pro", "tier_role": "Flagship", "aa_name": "Claude Opus 5.5", "slugs": ["claude-opus-5-5-low", "claude-opus-5-5-medium", "claude-opus-5-5-high", "claude-opus-5-5-xhigh", "claude-opus-5-5"], "my_notes": ""},
+    {"key": "claude-sonnet-5-5", "display_name": "Claude Sonnet 5.5", "subscription": "Claude Pro", "tier_role": "Mid", "aa_name": "Claude Sonnet 5.5", "slugs": ["claude-sonnet-5-5-low", "claude-sonnet-5-5-medium", "claude-sonnet-5-5-high", "claude-sonnet-5-5-xhigh", "claude-sonnet-5-5"], "my_notes": ""},
+    {"key": "claude-haiku-5-5", "display_name": "Claude Haiku 5.5", "subscription": "Claude Pro", "tier_role": "Small", "aa_name": "Claude Haiku 5.5", "slugs": ["claude-haiku-5-5-low", "claude-haiku-5-5-medium", "claude-haiku-5-5-high", "claude-haiku-5-5-xhigh", "claude-haiku-5-5"], "my_notes": ""},
+    {"key": "gemini-4-argon", "display_name": "Gemini 4 Argon", "subscription": "Google AI Pro", "tier_role": "Flagship", "aa_name": "Gemini 4 Argon", "slugs": ["gemini-4-argon"], "my_notes": ""},
+    {"key": "gemini-3-8-flash", "display_name": "Gemini 3.8 Flash", "subscription": "Google AI Pro", "tier_role": "Mid", "aa_name": "Gemini 3.8 Flash", "slugs": ["gemini-3-8-flash-low", "gemini-3-8-flash-medium", "gemini-3-8-flash"], "my_notes": ""},
+    {"key": "gemini-3-5-flash-lite", "display_name": "Gemini 3.5 Flash-Lite", "subscription": "Google AI Pro", "tier_role": "Small", "aa_name": "Gemini 3.5 Flash-Lite", "slugs": ["gemini-3-5-flash-lite"], "my_notes": ""}
+  ]
+}

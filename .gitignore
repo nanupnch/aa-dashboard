@@ -1,0 +1,10 @@
+# Generated in CI from data/snapshots; never committed
+site/data/
+# Full raw API responses from discover.py — must not be published
+spike/
+__pycache__/
+*.pyc
+.DS_Store
+*.tmp
+# Local editor/preview config
+.claude/
