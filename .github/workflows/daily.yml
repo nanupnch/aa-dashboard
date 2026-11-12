@@ -7,6 +7,8 @@ on:
     - cron: '43 21 * * *'
     - cron: '43 22 * * *'
     - cron: '43 23 * * *'
+  push:
+    branches: [main]   # deploy code changes; the bot's own data commits don't re-trigger
   workflow_dispatch:
     inputs:
       force:
@@ -30,12 +32,14 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
+      # fetch.py skips (skip=true) when today's data is already in; then only the data commit is skipped,
+      # and the site is still tested, built and deployed (so manual runs and code pushes always deploy).
       - name: Fetch
         id: fetch
         run: python scripts/fetch.py ${{ inputs.force && '--force' || '' }}
@@ -43,7 +47,6 @@ jobs:
           AA_API_KEY: ${{ secrets.AA_API_KEY }}
 
       - name: Test and build
-        if: steps.fetch.outputs.skip != 'true'
         run: |
           python -m unittest discover -s tests
           python scripts/build.py
@@ -58,14 +61,11 @@ jobs:
           git pull --rebase
           git push
 
-      - if: steps.fetch.outputs.skip != 'true'
-        uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
-      - if: steps.fetch.outputs.skip != 'true'
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
-      - if: steps.fetch.outputs.skip != 'true'
-        id: deploy
-        uses: actions/deploy-pages@v4
+      - id: deploy
+        uses: actions/deploy-pages@v5

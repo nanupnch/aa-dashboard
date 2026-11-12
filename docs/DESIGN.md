@@ -398,6 +398,8 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
+**As built** (see `.github/workflows/daily.yml`, which supersedes the sketch above): when today's data is already in, the guard skips only the fetch and the data commit. Tests, build and deploy always run, so manual runs and code pushes always reach the site. A `push` to `main` also triggers it; the bot's own data commits use `GITHUB_TOKEN`, so they don't re-trigger it. Action versions: checkout v7, setup-python v7, configure-pages v6, upload-pages-artifact v5, deploy-pages v5. The first deploy showed why: the snapshot committed on day one marked the day as checked, so the original guard skipped the deploy entirely.
+
 **Why three UTC crons and no `timezone:` key.** The three times cover both Pacific offsets, so the schedule doesn't depend on GitHub honouring a time-zone setting. Daylight-saving changes need no edits. In any season, the first run lands before 3 pm Pacific and at least one more follows as a safety net. The "already checked today (Pacific)" guard makes the later runs free.
 
 **Deploys within the same job** because commits pushed with `GITHUB_TOKEN` do not trigger other workflows.
