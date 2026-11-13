@@ -215,7 +215,7 @@ tr.beaten td { color: var(--muted); }
 .info { position: relative; }
 
 /* Trade-off chart overlays */
-.chart .quad { fill: var(--gold); fill-opacity: 0.12; }
+.chart .quad { fill: var(--gold); fill-opacity: 0.22; stroke: var(--gold); stroke-opacity: 0.7; stroke-width: 1; stroke-dasharray: 4 3; }
 .chart .quad-lbl { fill: var(--gold); font-size: 14px; }
 .chart .median { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
 .chart .pareto { fill: none; stroke: var(--ink); stroke-opacity: 0.55; stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; opacity: 0.35; }
