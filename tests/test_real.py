@@ -70,9 +70,9 @@ class RealSample(unittest.TestCase):
         self.assertEqual(picks["value"], "gpt-6-1-sol-medium")         # flat cost knee; cheapest within noise
         self.assertEqual(picks["fast"], "gpt-6-1-sol-medium")
         self.assertNotIn("dominant", picks)                              # dropped Nov 12
-        self.assertEqual(picks["budget"], "gpt-6-1-terra-high")
+        self.assertEqual(picks["budget"], "gpt-6-1-sol-medium")
         sol = next(e for e in latest["quick_picks"] if e["slug"] == "gpt-6-1-sol-medium")
-        self.assertEqual(len(sol["picks"]), 2)                          # one row, two labels
+        self.assertEqual(len(sol["picks"]), 3)                          # one row, three labels
         self.assertGreater(sol["beats"], 0)
 
     def test_plan_picks_on_real_data(self):

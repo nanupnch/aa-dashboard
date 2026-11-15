@@ -598,6 +598,43 @@
    }
   },
   {
+   "slug": "gemini-4-argon-medium",
+   "name": "Gemini 4 Argon (Medium)",
+   "release_date": "2026-09-30",
+   "model_creator": {
+    "id": "faddc6d9-2c14-445f-9b28-56726f59c793",
+    "name": "Google"
+   },
+   "evaluations": {
+    "artificial_analysis_intelligence_index": 47.6,
+    "artificial_analysis_coding_index": null,
+    "artificial_analysis_agentic_index": null,
+    "artificial_analysis_finance_and_accounting_index": 52.9,
+    "artificial_analysis_strategy_and_ops_index": 55.8,
+    "artificial_analysis_legal_index": 52,
+    "artificial_analysis_healthcare_and_medical_index": null,
+    "artificial_analysis_engineering_index": 52.7,
+    "artificial_analysis_economics_index": 48.7
+   },
+   "artificial_analysis_intelligence_index_cost": {
+    "total_cost": 3107.17,
+    "cost_per_task": {
+     "total_cost": 4.3146
+    }
+   },
+   "performance_v3": {
+    "mean_output_tokens_per_second": 55.73,
+    "mean_time_to_first_token_seconds": 9.9,
+    "mean_time_to_first_answer_token_seconds": 9.9
+   },
+   "pricing": {
+    "price_1m_input_tokens": 2,
+    "price_1m_output_tokens": 10,
+    "price_1m_cache_hit_tokens": 0.1,
+    "price_1m_cache_write_tokens": null
+   }
+  },
+  {
    "slug": "gemini-4-hydrogen",
    "name": "Gemini 4 Hydrogen (Xhigh)",
    "release_date": "2026-11-12",
