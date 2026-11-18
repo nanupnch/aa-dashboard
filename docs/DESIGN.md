@@ -36,8 +36,8 @@ Everything on the page exists to answer that question, for the 9 models unlocked
 
 | Subscription | Model | Tier |
 | --- | --- | --- |
-| ChatGPT Plus | GPT-6 Astra | Largest |
-| ChatGPT Plus | GPT-6.1 Sol | Flagship |
+| ChatGPT Plus | GPT-6.2 Astra | Largest |
+| ChatGPT Plus | GPT-6.2 Sol | Flagship |
 | ChatGPT Plus | GPT-6.1 Terra | Mid |
 | ChatGPT Plus | GPT-6 Luna | Small |
 | Claude Pro | Claude Opus 5.5 | Flagship |

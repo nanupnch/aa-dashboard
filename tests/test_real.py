@@ -52,10 +52,11 @@ class RealSample(unittest.TestCase):
                 "fetched_at": "2026-11-12T19:00:00Z", "records": self.records}
         latest = build.build_latest([("2026-11-12", snap)], {}, SLATE, AXES, SETTINGS)
         merged = {v["slug"]: v["merged_into"] for m in latest["models"] for v in m["variants"] if v["merged_into"]}
-        self.assertEqual(merged["gpt-6-astra-xhigh"], "gpt-6-astra-high")         # 55.3 vs 54.8
+        self.assertEqual(merged["gpt-6-2-astra-xhigh"], "gpt-6-2-astra-high")     # 61.6 vs 60.1
+        self.assertEqual(merged["gpt-6-2-astra"], "gpt-6-2-astra-high")           # 62.1 vs 60.1
         self.assertEqual(merged["claude-opus-5-5"], "claude-opus-5-5-xhigh")       # 59.1 vs 57.4
         self.assertEqual(merged["gpt-6-luna-non-reasoning"], "gpt-6-luna-low")     # 9.4 vs 9.7, Low cheaper
-        self.assertNotIn("gpt-6-1-sol", merged)                                    # steps of 2.1+ points
+        self.assertNotIn("gpt-6-2-sol", merged)                                    # 57.3 vs 55.7
         for m in latest["models"]:
             for v in m["variants"]:
                 if v["dominated_by"]:
@@ -66,13 +67,13 @@ class RealSample(unittest.TestCase):
                 "fetched_at": "2026-11-12T19:00:00Z", "records": self.records}
         latest = build.build_latest([("2026-11-12", snap)], {}, SLATE, AXES, SETTINGS)
         picks = {p["id"]: e["slug"] for e in latest["quick_picks"] for p in e["picks"]}
-        self.assertEqual(picks["smartest"], "claude-opus-5-5-xhigh")   # 57.4; Max (59.1) merged into it
-        self.assertEqual(picks["value"], "gpt-6-1-sol-medium")         # flat cost knee; cheapest within noise
-        self.assertEqual(picks["fast"], "gpt-6-1-sol-medium")
+        self.assertEqual(picks["smartest"], "gpt-6-2-astra-high")      # 60.1; Xhigh (61.6) and Max (62.1) merged into it
+        self.assertEqual(picks["value"], "gpt-6-2-sol-medium")         # flat cost knee; cheapest within noise
+        self.assertEqual(picks["fast"], "gpt-6-2-astra-medium")
         self.assertNotIn("dominant", picks)                              # dropped Nov 12
-        self.assertEqual(picks["budget"], "gpt-6-1-sol-medium")
-        sol = next(e for e in latest["quick_picks"] if e["slug"] == "gpt-6-1-sol-medium")
-        self.assertEqual(len(sol["picks"]), 3)                          # one row, three labels
+        self.assertEqual(picks["budget"], "gpt-6-1-terra-high")
+        sol = next(e for e in latest["quick_picks"] if e["slug"] == "gpt-6-2-sol-medium")
+        self.assertEqual(len(sol["picks"]), 1)
         self.assertGreater(sol["beats"], 0)
 
     def test_plan_picks_on_real_data(self):
@@ -82,7 +83,7 @@ class RealSample(unittest.TestCase):
         latest = build.build_latest([("2026-11-12", snap)], {}, SLATE, AXES, SETTINGS)
         plans = {p["plan"]: {x["id"]: e["slug"] for e in p["picks"] for x in e["picks"]} for p in latest["plan_picks"]}
         self.assertEqual(list(plans), ["ChatGPT Plus", "Claude Pro", "Google AI Pro"])
-        self.assertEqual(plans["ChatGPT Plus"]["smartest"], "gpt-6-astra")
+        self.assertEqual(plans["ChatGPT Plus"]["smartest"], "gpt-6-2-astra-high")
         self.assertEqual(plans["Claude Pro"]["smartest"], "claude-opus-5-5-xhigh")
         self.assertEqual(plans["Claude Pro"]["value"], "claude-haiku-5-5-high")
         self.assertEqual(plans["Google AI Pro"]["smartest"], "gemini-4-hydrogen")
