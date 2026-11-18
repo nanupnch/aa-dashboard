@@ -1,7 +1,9 @@
 """Download the AA model list and save a trimmed snapshot if displayed values changed.
 
 Always writes data/last_checked.json on success. Writes skip=true to $GITHUB_OUTPUT
-when today's (local) check already happened and --force is not given.
+when the last check was less than settings.min_hours_between_checks ago and --force
+is not given (so a code push right after a scheduled run doesn't spend API calls).
+Snapshots are named by local date; a second change on the same day overwrites that day's file.
 
 Usage: AA_API_KEY=... python scripts/fetch.py [--force]
 """
@@ -10,7 +12,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -32,10 +34,15 @@ def run(force: bool, data_dir: Path, config_dir: Path, key: str | None,
     last_path = data_dir / "last_checked.json"
     last = aa.read_json(last_path, {}) or {}
 
-    if last.get("date") == today.isoformat() and not force:
-        print(f"Already checked today ({today}); nothing to do. Use --force to re-fetch.")
-        set_output("skip", "true")
-        return 0
+    gap = timedelta(hours=settings.get("min_hours_between_checks", 2))
+    checked_at = last.get("checked_at")
+    if checked_at and not force:
+        since = now - datetime.fromisoformat(checked_at.replace("Z", "+00:00"))
+        if since < gap:
+            print(f"Checked {since.total_seconds() / 3600:.1f} h ago ({checked_at}); nothing to do. "
+                  "Use --force to re-fetch.")
+            set_output("skip", "true")
+            return 0
     if not key:
         print("::error::AA_API_KEY is not set")
         return 1
@@ -87,7 +94,7 @@ def run(force: bool, data_dir: Path, config_dir: Path, key: str | None,
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--force", action="store_true", help="re-fetch even if already checked today")
+    ap.add_argument("--force", action="store_true", help="re-fetch even if checked recently")
     ap.add_argument("--data-dir", type=Path, default=aa.DATA_DIR)
     ap.add_argument("--config-dir", type=Path, default=aa.CONFIG_DIR)
     args = ap.parse_args(argv)

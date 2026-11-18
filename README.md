@@ -1,6 +1,6 @@
 # AI Model Lineup
 
-A one-page dashboard comparing the models in ChatGPT Plus, Claude Pro and Google AI Pro on three measures: intelligence, cost per task, and wait before answer. It covers every effort level, uses [Artificial Analysis](https://artificialanalysis.ai/) data, and refreshes daily before 3 pm Pacific. Hosting and scheduling are free (GitHub Pages and GitHub Actions).
+A one-page dashboard comparing the models in ChatGPT Plus, Claude Pro and Google AI Pro on three measures: intelligence, cost per task, and wait before answer. It covers every effort level, uses [Artificial Analysis](https://artificialanalysis.ai/) data, and refreshes every 3 hours. Hosting and scheduling are free (GitHub Pages and GitHub Actions).
 
 Design: [docs/DESIGN.md](docs/DESIGN.md).
 
@@ -33,19 +33,19 @@ Design: [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Day to day
 
-- The job runs at 21:43, 22:43 and 23:43 UTC. Whichever run comes first on a given Pacific day does the work, and later runs exit immediately. That timing keeps the data fresh before 3 pm Pacific all year.
-- A snapshot is committed only when a displayed value changes. `data/last_checked.json` is committed on every run, which keeps the scheduled workflow from being disabled after 60 days without activity.
+- The job runs every 3 hours, at 43 minutes past 00:00, 03:00, 06:00 … 21:00 UTC. A run that comes less than 2 hours after the last check (a code push, say) skips the fetch, so it spends no API calls. About 8 checks a day use roughly 8–24 of the 100 daily calls.
+- A snapshot is committed only when a displayed value changes. Snapshots are one file per Pacific day, so a second change on the same day overwrites that day's file. `data/last_checked.json` is committed on every run, which keeps the scheduled workflow from being disabled after 60 days without activity.
 - The **Data health** panel lists anything that needs you, each with the exact line to paste:
   - new effort variants
   - pinned variants that went missing
   - new models from OpenAI, Anthropic or Google
   - values outside the axis range
-- The badge turns amber when the last check is more than 36 hours old, and red after 72 hours.
+- The badge turns amber when the last check is more than 9 hours old (two missed runs), and red after 24 hours.
 
 ## Development
 
 ```bash
-python3 -m unittest discover -s tests             # 49 tests, standard library only
+python3 -m unittest discover -s tests             # 50 tests, standard library only
 python3 scripts/build.py --demo                   # synthetic data -> site/data (preview only)
 python3 -m http.server -d site 8765
 python3 tests/fixtures/make_fixtures.py           # regenerate synthetic fixtures

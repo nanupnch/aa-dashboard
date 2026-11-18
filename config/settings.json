@@ -10,6 +10,7 @@
   "tolerance": { "intelligence_abs": 2, "cost_rel": 0.10, "time_rel": 0.20 },
   "tracked_creators": ["OpenAI", "Anthropic", "Google"],
   "candidate_window_days": 120,
-  "stale_hours": { "amber": 36, "red": 72 },
+  "stale_hours": { "amber": 9, "red": 24 },
+  "min_hours_between_checks": 2,
   "timezone": "America/Los_Angeles"
 }

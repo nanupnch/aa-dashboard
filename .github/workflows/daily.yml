@@ -2,17 +2,15 @@ name: daily-refresh
 
 on:
   schedule:
-    # UTC times covering both Pacific offsets; fetch.py skips if already checked today (Pacific).
-    # PDT: 14:43, 15:43, 16:43   PST: 13:43, 14:43, 15:43  -> always fresh before 3 pm Pacific.
-    - cron: '43 21 * * *'
-    - cron: '43 22 * * *'
-    - cron: '43 23 * * *'
+    # Every 3 hours (00:43, 03:43, ... UTC). fetch.py skips if the last check was under 2 hours ago,
+    # so a code push right after a scheduled run doesn't spend API calls. ~8 runs/day, well under 100 calls.
+    - cron: '43 */3 * * *'
   push:
     branches: [main]   # deploy code changes; the bot's own data commits don't re-trigger
   workflow_dispatch:
     inputs:
       force:
-        description: Re-fetch even if already checked today
+        description: Re-fetch even if checked in the last 2 hours
         type: boolean
         default: false
 
@@ -38,7 +36,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      # fetch.py skips (skip=true) when today's data is already in; then only the data commit is skipped,
+      # fetch.py skips (skip=true) when the last check was under 2 hours ago; then only the data commit is skipped,
       # and the site is still tested, built and deployed (so manual runs and code pushes always deploy).
       - name: Fetch
         id: fetch

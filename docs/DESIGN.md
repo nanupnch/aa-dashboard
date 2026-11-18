@@ -6,7 +6,7 @@ Nov 12, 2026 · supersedes the v1 design doc
 
 **The decision this serves:** "For this task, which model and effort should I use without wasting my subscription allowance?"
 
-Everything on the page exists to answer that question, for the 9 models unlocked by ChatGPT Plus, Claude Pro and Google AI Pro. Data comes from the Artificial Analysis (AA) free API. The page is a static site on GitHub Pages, refreshed by a GitHub Actions job every day before 3 pm local time. It costs nothing.
+Everything on the page exists to answer that question, for the 9 models unlocked by ChatGPT Plus, Claude Pro and Google AI Pro. Data comes from the Artificial Analysis (AA) free API. The page is a static site on GitHub Pages, refreshed by a GitHub Actions job every 3 hours (daily until Nov 18). It costs nothing.
 
 ### Design principles
 
@@ -23,7 +23,7 @@ Everything on the page exists to answer that question, for the 9 models unlocked
 | Free now, Pro later | Free key only | Removes two open questions and a code path |
 | Rows sorted globally | One flat list in tier order (Largest → Small); each model is marked by plan colour × tier shape (◆ ● ■ ▲); sorting ranks across all models | No group headers to read. Colour and shape together identify every model in both the lineup and the chart, without text labels. Dominance (hollow dots) stays within one plan, because allowances are metered per provider. |
 | Pareto marking in the trade-off chart only | Dominated variants are hollow dots in the Lineup | Shows "never worth picking" without reading across lanes |
-| Snapshot every day | Check daily; snapshot only when a displayed value changes | Daily snapshots would be near-duplicates. Speed is already a 5-day average. |
+| Snapshot every check | Check every 3 hours; snapshot only when a displayed value changes | Daily snapshots would be near-duplicates. Speed is already a 5-day average. |
 | History line chart | Change log (line chart deferred) | Index scores for a fixed variant are flat, so lines would carry no information. The question you actually check for is "what's new?" |
 | Axes fitted to each day's data | Fixed axis ranges per index major version | Dots must not move unless the data moved. |
 | Exact ranking | Ties within a noise tolerance | A gap of 1–2 index points is within sampling error. |
@@ -77,7 +77,7 @@ All field paths are **unverified until step 0** (§10).
 ## 4. Architecture
 
 ```
-GitHub Actions (daily)                                GitHub Pages
+GitHub Actions (every 3 h)                            GitHub Pages
 ┌──────────────────────────────────────────────┐     ┌─────────────────────┐
 │ fetch.py ──► data/snapshots/DATE.json        │     │ index.html          │
 │   │          (only when changed)             │     │ app.js  style.css   │
@@ -164,7 +164,8 @@ Ranges are keyed by index **major** version. They are set once from step-0 data,
   "tolerance": { "intelligence_abs": 2, "cost_rel": 0.10, "time_rel": 0.20 },
   "tracked_creators": ["OpenAI", "Anthropic", "Google"],
   "candidate_window_days": 120,
-  "stale_hours": { "amber": 36, "red": 72 },
+  "stale_hours": { "amber": 9, "red": 24 },
+  "min_hours_between_checks": 2,
   "timezone": "America/Los_Angeles"
 }
 ```
@@ -173,7 +174,7 @@ Ranges are keyed by index **major** version. They are set once from step-0 data,
 
 ### 6.1 `fetch.py`
 
-1. If `last_checked.json` already shows today's date (in the configured time zone) and `--force` is not set, write `skip=true` to `$GITHUB_OUTPUT` and exit 0. This makes the safety-net run free on normal days.
+1. If `last_checked.json` shows a check less than `min_hours_between_checks` (2) hours ago and `--force` is not set, write `skip=true` to `$GITHUB_OUTPUT` and exit 0. This keeps code pushes right after a scheduled run from spending API calls. (Until Nov 18 the guard was once per Pacific day.) Snapshots are still named by Pacific date, so a second change on the same day overwrites that day's file.
 2. Request every page of `/api/v2/language/models/free` with header `x-api-key`.
    - Retry 5xx responses and timeouts 3 times (waits of 2 s, 8 s and 32 s).
    - Exit 1 on 401.
@@ -359,14 +360,11 @@ The badge follows `last_checked`, not `data_date`. Unchanged data still counts a
 name: daily-refresh
 on:
   schedule:
-    # UTC crons that cover both Pacific offsets; fetch.py skips if already checked today (Pacific).
-    # PDT: 14:43, 15:43, 16:43   PST: 13:43, 14:43, 15:43
-    - cron: '43 21 * * *'
-    - cron: '43 22 * * *'
-    - cron: '43 23 * * *'
+    # Every 3 hours; fetch.py skips if the last check was under 2 hours ago.
+    - cron: '43 */3 * * *'
   workflow_dispatch:
     inputs:
-      force: { type: boolean, default: false, description: 'Re-fetch even if checked today' }
+      force: { type: boolean, default: false, description: 'Re-fetch even if checked in the last 2 hours' }
 permissions: { contents: write, pages: write, id-token: write }
 concurrency: { group: daily-refresh, cancel-in-progress: false }
 jobs:
@@ -398,9 +396,9 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-**As built** (see `.github/workflows/daily.yml`, which supersedes the sketch above): when today's data is already in, the guard skips only the fetch and the data commit. Tests, build and deploy always run, so manual runs and code pushes always reach the site. A `push` to `main` also triggers it; the bot's own data commits use `GITHUB_TOKEN`, so they don't re-trigger it. Action versions: checkout v7, setup-python v7, configure-pages v6, upload-pages-artifact v5, deploy-pages v5. The first deploy showed why: the snapshot committed on day one marked the day as checked, so the original guard skipped the deploy entirely.
+**As built** (see `.github/workflows/daily.yml`, which supersedes the sketch above): when the last check is recent, the guard skips only the fetch and the data commit. Tests, build and deploy always run, so manual runs and code pushes always reach the site. A `push` to `main` also triggers it; the bot's own data commits use `GITHUB_TOKEN`, so they don't re-trigger it. Action versions: checkout v7, setup-python v7, configure-pages v6, upload-pages-artifact v5, deploy-pages v5. The first deploy showed why: the snapshot committed on day one marked the day as checked, so the original guard skipped the deploy entirely.
 
-**Why three UTC crons and no `timezone:` key.** The three times cover both Pacific offsets, so the schedule doesn't depend on GitHub honouring a time-zone setting. Daylight-saving changes need no edits. In any season, the first run lands before 3 pm Pacific and at least one more follows as a safety net. The "already checked today (Pacific)" guard makes the later runs free.
+**Superseded Nov 18 by a 3-hourly cron and a 2-hour guard.** Original rationale — **why three UTC crons and no `timezone:` key.** The three times cover both Pacific offsets, so the schedule doesn't depend on GitHub honouring a time-zone setting. Daylight-saving changes need no edits. In any season, the first run lands before 3 pm Pacific and at least one more follows as a safety net. The "already checked today (Pacific)" guard makes the later runs free.
 
 **Deploys within the same job** because commits pushed with `GITHUB_TOKEN` do not trigger other workflows.
 
