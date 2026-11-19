@@ -466,7 +466,13 @@ function renderChanges() {
   $('#changes-sec').hidden = !list.length;
   const days = new Map();
   for (const e of list) { if (!days.has(e.date)) days.set(e.date, []); days.get(e.date).push(e); }
-  $('#changes').innerHTML = [...days].map(([date, evs]) => `<div class="day"><time datetime="${esc(date)}">${esc(shortDate(date))}</time><ul>${evs.map((e) => `<li>${eventHtml(e)}</li>`).join('')}</ul></div>`).join('');
+  // Newest day stays open; older days collapse to a one-line summary.
+  $('#changes').innerHTML = [...days].map(([date, evs], i) => {
+    const t = `<time datetime="${esc(date)}">${esc(shortDate(date))}</time>`;
+    const ul = `<ul>${evs.map((e) => `<li>${eventHtml(e)}</li>`).join('')}</ul>`;
+    if (i === 0) return `<div class="day">${t}${ul}</div>`;
+    return `<details class="day"><summary>${t}<span class="muted">${evs.length} change${evs.length === 1 ? '' : 's'}</span></summary>${ul}</details>`;
+  }).join('');
   $('#more-changes').hidden = state.allChanges || state.events.length === recent.length;
 }
 

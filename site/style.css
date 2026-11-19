@@ -143,6 +143,13 @@ td.note { white-space: normal; color: var(--ink-2); }
 #changes { font-size: 13.5px; }
 .day { display: grid; grid-template-columns: 56px 1fr; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--grid); }
 .day time { color: var(--muted); padding-top: 2px; }
+details.day { display: block; }
+details.day > summary { display: grid; grid-template-columns: 56px 1fr; gap: 12px; cursor: pointer; list-style: none; }
+details.day > summary::-webkit-details-marker { display: none; }
+details.day > summary span { padding-top: 2px; }
+details.day > summary span::after { content: " ▸"; font-size: 11px; }
+details.day[open] > summary span::after { content: " ▾"; }
+details.day > ul { margin-left: 68px; }
 .day ul, .health { list-style: none; margin: 0; padding: 0; }
 .day li, .health li { padding: 2px 0; }
 .ev { display: inline-block; width: 18px; font-weight: 700; color: var(--muted); }
