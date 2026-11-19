@@ -43,6 +43,7 @@ Everything on the page exists to answer that question, for the 9 models unlocked
 | Claude Pro | Claude Opus 5.5 | Flagship |
 | Claude Pro | Claude Sonnet 5.5 | Mid |
 | Claude Pro | Claude Haiku 5.5 | Small |
+| Google AI Pro | Gemini 4 Neon | Largest (added Nov 18) |
 | Google AI Pro | Gemini 4 Argon | Flagship |
 | Google AI Pro | Gemini 4 Hydrogen | Mid (added Nov 12: Flash-class, "Everyday help" in the Gemini app picker) |
 

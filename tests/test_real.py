@@ -71,7 +71,7 @@ class RealSample(unittest.TestCase):
         self.assertEqual(picks["value"], "gpt-6-2-sol-medium")         # flat cost knee; cheapest within noise
         self.assertEqual(picks["fast"], "gpt-6-2-astra-medium")
         self.assertNotIn("dominant", picks)                              # dropped Nov 12
-        self.assertEqual(picks["budget"], "gpt-6-1-terra-high")
+        self.assertEqual(picks["budget"], "gpt-6-1-terra-xhigh")       # Neon lifts the median past Terra High
         sol = next(e for e in latest["quick_picks"] if e["slug"] == "gpt-6-2-sol-medium")
         self.assertEqual(len(sol["picks"]), 1)
         self.assertGreater(sol["beats"], 0)
@@ -86,7 +86,7 @@ class RealSample(unittest.TestCase):
         self.assertEqual(plans["ChatGPT Plus"]["smartest"], "gpt-6-2-astra-high")
         self.assertEqual(plans["Claude Pro"]["smartest"], "claude-opus-5-5-xhigh")
         self.assertEqual(plans["Claude Pro"]["value"], "claude-haiku-5-5-high")
-        self.assertEqual(plans["Google AI Pro"]["smartest"], "gemini-4-hydrogen")
+        self.assertEqual(plans["Google AI Pro"]["smartest"], "gemini-4-neon-high")
         subs = {m["key"]: m["subscription"] for m in latest["models"]}
         for p in latest["plan_picks"]:
             self.assertTrue(all(subs[e["model"]] == p["plan"] for e in p["picks"]))
