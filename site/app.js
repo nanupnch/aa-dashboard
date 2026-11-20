@@ -3,6 +3,7 @@
 
 const SUBS = { 'ChatGPT Plus': 'chatgpt', 'Claude Pro': 'claude', 'Google AI Pro': 'google' };
 const PLAN_KEY = 'aa-dashboard:picks-plan';
+const THEME_KEY = 'aa-dashboard:theme';
 const LANES = [
   { key: 'intelligence', title: 'Smarter', tip: 'Intelligence Index' },
   { key: 'cost', title: 'Cheaper', tip: 'Cost per task (log scale)' },
@@ -11,7 +12,7 @@ const LANES = [
 const MEASURE = { intelligence: 'Intelligence', cost: 'Cost/task', time: 'Wait' };
 const X0 = 0.06, X1 = 0.94; // lane padding so edge dots stay inside
 
-const state = { picksPlan: 'overall', data: null, events: [], effort: null, sortBy: null, tradeX: 'cost', allChanges: false, showBeaten: false, focus: null, minScore: null, maxTime: null };
+const state = { theme: 'system', picksPlan: 'overall', data: null, events: [], effort: null, sortBy: null, tradeX: 'cost', allChanges: false, showBeaten: false, focus: null, minScore: null, maxTime: null };
 
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -608,8 +609,56 @@ function renderAll() {
   renderHealth();
 }
 
+/* ---------- theme ---------- */
+const themeMeta = () => $('meta[name="color-scheme"]');
+const normalizeTheme = (v) => (v === 'light' || v === 'dark' ? v : 'system');
+function readStoredTheme() {
+  try {
+    return normalizeTheme(localStorage.getItem(THEME_KEY));
+  } catch (_) {
+    return normalizeTheme(themeMeta()?.content);
+  }
+}
+function applyTheme(mode, persist = true) {
+  const next = normalizeTheme(mode);
+  state.theme = next;
+  const meta = themeMeta();
+  if (meta) meta.content = next === 'system' ? 'light dark' : next;
+  document.querySelectorAll('#theme button[data-theme]').forEach((b) => {
+    b.setAttribute('aria-pressed', String(b.dataset.theme === next));
+  });
+  if (persist) {
+    try {
+      if (next === 'system') localStorage.removeItem(THEME_KEY);
+      else localStorage.setItem(THEME_KEY, next);
+    } catch (_) { /* no storage */ }
+  }
+}
+function initTheme() {
+  applyTheme(readStoredTheme(), false);
+  const group = $('#theme');
+  if (group) {
+    group.addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-theme]');
+      if (b) applyTheme(b.dataset.theme, true);
+    });
+  }
+  const mq = matchMedia('(prefers-color-scheme: dark)');
+  const sysBtn = $('#theme button[data-theme="system"]');
+  const syncSysTitle = () => {
+    if (sysBtn) sysBtn.title = `Follow system theme (currently ${mq.matches ? 'dark' : 'light'})`;
+  };
+  syncSysTitle();
+  if (mq.addEventListener) mq.addEventListener('change', syncSysTitle);
+  else if (mq.addListener) mq.addListener(syncSysTitle);
+  addEventListener('storage', (e) => {
+    if (e.key === null || e.key === THEME_KEY) applyTheme(readStoredTheme(), false);
+  });
+}
+
 /* ---------- events ---------- */
 function wire() {
+  initTheme();
   $('#efforts').addEventListener('click', (e) => {
     const b = e.target.closest('button[data-effort]');
     if (!b) return;

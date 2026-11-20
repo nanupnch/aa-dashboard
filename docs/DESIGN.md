@@ -341,7 +341,7 @@ The badge follows `last_checked`, not `data_date`. Unchanged data still counts a
 
 - **Width ≥ 720 px:** the name column is 200 px and the lanes share the remainder.
 - **Below 720 px:** the name moves to its own line, and the three lanes run full width at about 110 px each on a 375 px phone, with 16 px gutters.
-- **Light mode only**, by choice; colours are CSS variables on `:root`.
+- **System / Light / Dark themes:** follows the OS preference by default (`color-scheme: light dark` and `light-dark()`, with `@media (prefers-color-scheme: dark)` fallbacks), with a three-state `System | Light | Dark` control in the header backed by `<meta name="color-scheme">` and `localStorage`; colours are CSS variables on `:root`.
 - **Keyboard:** each row is one tab stop with an `aria-label` that summarises the row ("Claude Opus 5.5, max effort: intelligence 58, $1.80 per task, 41 s wait"). Enter opens the detail table with every value. This replaces about 90 per-dot tab stops.
 - **Tables:** the detail panel is a real `<table>`; there is no separate all-variants table.
 - **No JavaScript:** the page shows a static message linking to `data/latest.json`.

@@ -3,7 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="light dark">
+<script>
+try {
+  var t = localStorage.getItem('aa-dashboard:theme');
+  if (t === 'light' || t === 'dark') document.querySelector('meta[name="color-scheme"]').content = t;
+} catch (_) {}
+</script>
 <title>AI Model Lineup</title>
 <meta name="description" content="Intelligence, cost per task and speed for the models in ChatGPT Plus, Claude Pro and Google AI Pro, from Artificial Analysis data.">
 <link rel="stylesheet" href="style.css">
@@ -11,7 +17,46 @@
 </head>
 <body>
 <header class="top">
-  <h1>AI Model Lineup</h1>
+  <div class="top-bar">
+    <h1>AI Model Lineup</h1>
+    <div class="seg theme-seg" id="theme" role="group" aria-label="Theme">
+      <button type="button" data-theme="system" aria-pressed="true" title="Follow system theme">
+        <svg class="t-ico sys-light" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M8.5 11.5H2.5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h9.5a1 1 0 0 1 1 1v3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4.5 14h3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="12" cy="11.5" r="1.7" fill="currentColor"/>
+          <g stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <line x1="12" y1="8.1" x2="12" y2="8.8"/><line x1="12" y1="14.2" x2="12" y2="14.9"/>
+            <line x1="8.6" y1="11.5" x2="9.3" y2="11.5"/><line x1="14.7" y1="11.5" x2="15.4" y2="11.5"/>
+          </g>
+        </svg>
+        <svg class="t-ico sys-dark" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M8.5 11.5H2.5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h9.5a1 1 0 0 1 1 1v3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4.5 14h3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <path fill="currentColor" d="M14.7 12.6a3 3 0 0 1-3.6-3.6 3.2 3.2 0 1 0 3.6 3.6Z"/>
+        </svg>
+        System<span class="sr-only sys-light"> (currently light)</span><span class="sr-only sys-dark"> (currently dark)</span>
+      </button>
+      <button type="button" data-theme="light" aria-pressed="false" title="Light theme">
+        <svg class="t-ico" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true">
+          <circle cx="8" cy="8" r="3.2" fill="currentColor"/>
+          <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <line x1="8" y1="1.5" x2="8" y2="3.1"/><line x1="8" y1="12.9" x2="8" y2="14.5"/>
+            <line x1="1.5" y1="8" x2="3.1" y2="8"/><line x1="12.9" y1="8" x2="14.5" y2="8"/>
+            <line x1="3.4" y1="3.4" x2="4.6" y2="4.6"/><line x1="11.4" y1="11.4" x2="12.6" y2="12.6"/>
+            <line x1="12.6" y1="3.4" x2="11.4" y2="4.6"/><line x1="4.6" y1="11.4" x2="3.4" y2="12.6"/>
+          </g>
+        </svg>
+        Light
+      </button>
+      <button type="button" data-theme="dark" aria-pressed="false" title="Dark theme">
+        <svg class="t-ico" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true">
+          <path fill="currentColor" d="M12.8 10.3A5.6 5.6 0 0 1 5.7 3.2a5.8 5.8 0 1 0 7.1 7.1Z"/>
+        </svg>
+        Dark
+      </button>
+    </div>
+  </div>
   <p class="meta"><span id="badge" class="badge" role="status">…</span><span id="meta"></span><span id="demo" class="demo" hidden>demo data</span></p>
 </header>
 

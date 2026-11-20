@@ -1,28 +1,208 @@
 :root {
-  color-scheme: light;
-  --bg: #fcfcfb;
-  --surface: #ffffff;
-  --ink: #1b1d22;
-  --ink-2: #4b505a;
-  --muted: #737985;
-  --rule: #e3e4e8;
-  --grid: #eef0f2;
-  --hover: #f3f4f6;
-  --focus: #2b6cd4;
+  color-scheme: light dark;
+
+  --bg-light: #fcfcfb;
+  --bg-dark: #111317;
+  --surface-light: #ffffff;
+  --surface-dark: #181b21;
+  --ink-light: #1b1d22;
+  --ink-dark: #eef0f4;
+  --ink-2-light: #4b505a;
+  --ink-2-dark: #c3c8d2;
+  --muted-light: #737985;
+  --muted-dark: #949ba8;
+  --rule-light: #e3e4e8;
+  --rule-dark: #373e4c;
+  --grid-light: #eef0f2;
+  --grid-dark: #252a34;
+  --hover-light: #f3f4f6;
+  --hover-dark: #222730;
+  --focus-light: #2b6cd4;
+  --focus-dark: #6ea8fe;
   /* Subscription identity (Okabe-Ito; validated for colour-blind separation on --bg) */
-  --chatgpt: #009E73;
-  --claude: #D55E00;
-  --google: #0072B2;
-  --other: #737985;
-  --gold: #d4a017;
+  --chatgpt-light: #009E73;
+  --chatgpt-dark: #00b887;
+  --claude-light: #D55E00;
+  --claude-dark: #eb731a;
+  --google-light: #0072B2;
+  --google-dark: #3b9ee3;
+  --other-light: #737985;
+  --other-dark: #949ba8;
+  --gold-light: #d4a017;
+  --gold-dark: #e5b52b;
   /* Status: reserved, always paired with an icon and a label */
-  --ok: #2e7d32;
-  --warn: #9a6100;
-  --bad: #b3261e;
-  --warn-bg: #fff4dc;
-  --bad-bg: #fde8e6;
-  --ok-bg: #e7f4e8;
+  --ok-light: #2e7d32;
+  --ok-dark: #6fd176;
+  --warn-light: #9a6100;
+  --warn-dark: #f2b94b;
+  --bad-light: #b3261e;
+  --bad-dark: #f27c75;
+  --warn-bg-light: #fff4dc;
+  --warn-bg-dark: #33260f;
+  --bad-bg-light: #fde8e6;
+  --bad-bg-dark: #381a1a;
+  --ok-bg-light: #e7f4e8;
+  --ok-bg-dark: #172e1b;
+  --backdrop-light: rgb(0 0 0 / 0.35);
+  --backdrop-dark: rgb(0 0 0 / 0.65);
+  --tip-bg-light: #1b1d22;
+  --tip-bg-dark: #262b35;
+  --tip-ink-light: #fcfcfb;
+  --tip-ink-dark: #f0f2f6;
+  --tip-border-light: transparent;
+  --tip-border-dark: #3d4554;
+  --tip-shadow-light: rgb(0 0 0 / 0.18);
+  --tip-shadow-dark: rgb(0 0 0 / 0.55);
+
+  --bg: var(--bg-light);
+  --surface: var(--surface-light);
+  --ink: var(--ink-light);
+  --ink-2: var(--ink-2-light);
+  --muted: var(--muted-light);
+  --rule: var(--rule-light);
+  --grid: var(--grid-light);
+  --hover: var(--hover-light);
+  --focus: var(--focus-light);
+  --chatgpt: var(--chatgpt-light);
+  --claude: var(--claude-light);
+  --google: var(--google-light);
+  --other: var(--other-light);
+  --gold: var(--gold-light);
+  --ok: var(--ok-light);
+  --warn: var(--warn-light);
+  --bad: var(--bad-light);
+  --warn-bg: var(--warn-bg-light);
+  --bad-bg: var(--bad-bg-light);
+  --ok-bg: var(--ok-bg-light);
+  --backdrop: var(--backdrop-light);
+  --tip-bg: var(--tip-bg-light);
+  --tip-ink: var(--tip-ink-light);
+  --tip-border: var(--tip-border-light);
+  --tip-shadow: var(--tip-shadow-light);
   --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+:root:has(> head > meta[name="color-scheme"][content="dark"]) {
+  color-scheme: dark;
+}
+:root:has(> head > meta[name="color-scheme"][content="light"]) {
+  color-scheme: light;
+}
+
+@supports (color: light-dark(white, black)) {
+  :root {
+    --bg: light-dark(var(--bg-light), var(--bg-dark));
+    --surface: light-dark(var(--surface-light), var(--surface-dark));
+    --ink: light-dark(var(--ink-light), var(--ink-dark));
+    --ink-2: light-dark(var(--ink-2-light), var(--ink-2-dark));
+    --muted: light-dark(var(--muted-light), var(--muted-dark));
+    --rule: light-dark(var(--rule-light), var(--rule-dark));
+    --grid: light-dark(var(--grid-light), var(--grid-dark));
+    --hover: light-dark(var(--hover-light), var(--hover-dark));
+    --focus: light-dark(var(--focus-light), var(--focus-dark));
+    --chatgpt: light-dark(var(--chatgpt-light), var(--chatgpt-dark));
+    --claude: light-dark(var(--claude-light), var(--claude-dark));
+    --google: light-dark(var(--google-light), var(--google-dark));
+    --other: light-dark(var(--other-light), var(--other-dark));
+    --gold: light-dark(var(--gold-light), var(--gold-dark));
+    --ok: light-dark(var(--ok-light), var(--ok-dark));
+    --warn: light-dark(var(--warn-light), var(--warn-dark));
+    --bad: light-dark(var(--bad-light), var(--bad-dark));
+    --warn-bg: light-dark(var(--warn-bg-light), var(--warn-bg-dark));
+    --bad-bg: light-dark(var(--bad-bg-light), var(--bad-bg-dark));
+    --ok-bg: light-dark(var(--ok-bg-light), var(--ok-bg-dark));
+    --backdrop: light-dark(var(--backdrop-light), var(--backdrop-dark));
+    --tip-bg: light-dark(var(--tip-bg-light), var(--tip-bg-dark));
+    --tip-ink: light-dark(var(--tip-ink-light), var(--tip-ink-dark));
+    --tip-border: light-dark(var(--tip-border-light), var(--tip-border-dark));
+    --tip-shadow: light-dark(var(--tip-shadow-light), var(--tip-shadow-dark));
+  }
+}
+
+@supports not (color: light-dark(white, black)) {
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: var(--bg-dark);
+      --surface: var(--surface-dark);
+      --ink: var(--ink-dark);
+      --ink-2: var(--ink-2-dark);
+      --muted: var(--muted-dark);
+      --rule: var(--rule-dark);
+      --grid: var(--grid-dark);
+      --hover: var(--hover-dark);
+      --focus: var(--focus-dark);
+      --chatgpt: var(--chatgpt-dark);
+      --claude: var(--claude-dark);
+      --google: var(--google-dark);
+      --other: var(--other-dark);
+      --gold: var(--gold-dark);
+      --ok: var(--ok-dark);
+      --warn: var(--warn-dark);
+      --bad: var(--bad-dark);
+      --warn-bg: var(--warn-bg-dark);
+      --bad-bg: var(--bad-bg-dark);
+      --ok-bg: var(--ok-bg-dark);
+      --backdrop: var(--backdrop-dark);
+      --tip-bg: var(--tip-bg-dark);
+      --tip-ink: var(--tip-ink-dark);
+      --tip-border: var(--tip-border-dark);
+      --tip-shadow: var(--tip-shadow-dark);
+    }
+  }
+  :root:has(> head > meta[name="color-scheme"][content="dark"]) {
+    --bg: var(--bg-dark);
+    --surface: var(--surface-dark);
+    --ink: var(--ink-dark);
+    --ink-2: var(--ink-2-dark);
+    --muted: var(--muted-dark);
+    --rule: var(--rule-dark);
+    --grid: var(--grid-dark);
+    --hover: var(--hover-dark);
+    --focus: var(--focus-dark);
+    --chatgpt: var(--chatgpt-dark);
+    --claude: var(--claude-dark);
+    --google: var(--google-dark);
+    --other: var(--other-dark);
+    --gold: var(--gold-dark);
+    --ok: var(--ok-dark);
+    --warn: var(--warn-dark);
+    --bad: var(--bad-dark);
+    --warn-bg: var(--warn-bg-dark);
+    --bad-bg: var(--bad-bg-dark);
+    --ok-bg: var(--ok-bg-dark);
+    --backdrop: var(--backdrop-dark);
+    --tip-bg: var(--tip-bg-dark);
+    --tip-ink: var(--tip-ink-dark);
+    --tip-border: var(--tip-border-dark);
+    --tip-shadow: var(--tip-shadow-dark);
+  }
+  :root:has(> head > meta[name="color-scheme"][content="light"]) {
+    --bg: var(--bg-light);
+    --surface: var(--surface-light);
+    --ink: var(--ink-light);
+    --ink-2: var(--ink-2-light);
+    --muted: var(--muted-light);
+    --rule: var(--rule-light);
+    --grid: var(--grid-light);
+    --hover: var(--hover-light);
+    --focus: var(--focus-light);
+    --chatgpt: var(--chatgpt-light);
+    --claude: var(--claude-light);
+    --google: var(--google-light);
+    --other: var(--other-light);
+    --gold: var(--gold-light);
+    --ok: var(--ok-light);
+    --warn: var(--warn-light);
+    --bad: var(--bad-light);
+    --warn-bg: var(--warn-bg-light);
+    --bad-bg: var(--bad-bg-light);
+    --ok-bg: var(--ok-bg-light);
+    --backdrop: var(--backdrop-light);
+    --tip-bg: var(--tip-bg-light);
+    --tip-ink: var(--tip-ink-light);
+    --tip-border: var(--tip-border-light);
+    --tip-shadow: var(--tip-shadow-light);
+  }
 }
 
 * { box-sizing: border-box; }
@@ -40,6 +220,19 @@ a { color: var(--focus); }
 
 .top, main, .foot { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
 .top { padding-top: 20px; }
+.top-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; flex-wrap: wrap; }
+.theme-seg button {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 9px; min-height: 30px; font-size: 12.5px; white-space: nowrap;
+}
+.theme-seg button:not([aria-pressed="true"]):hover { background: var(--hover); color: var(--ink); }
+.theme-seg .t-ico { display: block; flex: none; }
+.theme-seg .sys-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  .theme-seg .sys-light { display: none; }
+  .theme-seg .sys-dark { display: inline; }
+  .theme-seg .t-ico.sys-dark { display: block; }
+}
 h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
 h2 { font-size: 17px; margin: 0 0 8px; }
 .meta { margin: 6px 0 0; color: var(--muted); font-size: 13px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
@@ -177,7 +370,7 @@ dialog {
   border: 1px solid var(--rule); border-radius: 12px; padding: 0; background: var(--surface); color: var(--ink);
   width: min(760px, calc(100vw - 32px)); max-height: calc(100vh - 48px);
 }
-dialog::backdrop { background: rgb(0 0 0 / 0.35); }
+dialog::backdrop { background: var(--backdrop); }
 .dlg-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px 6px; position: sticky; top: 0; background: var(--surface); }
 .dlg-head h2 { margin: 0; }
 .close { font: inherit; background: none; border: 0; font-size: 18px; color: var(--ink-2); cursor: pointer; min-width: 36px; min-height: 36px; }
@@ -196,8 +389,8 @@ tr.beaten td { color: var(--muted); }
 /* Tooltip */
 .tip {
   position: fixed; z-index: 10; pointer-events: none; max-width: 260px;
-  background: var(--ink); color: var(--bg); font-size: 12.5px; line-height: 1.4;
-  padding: 7px 9px; border-radius: 6px; box-shadow: 0 4px 14px rgb(0 0 0 / 0.18);
+  background: var(--tip-bg); color: var(--tip-ink); font-size: 12.5px; line-height: 1.4;
+  padding: 7px 9px; border-radius: 6px; border: 1px solid var(--tip-border); box-shadow: 0 4px 14px var(--tip-shadow);
 }
 .tip b { font-weight: 600; }
 
@@ -315,6 +508,11 @@ svg .thresh-line { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 4 3;
 .plan-seg { max-width: 100%; overflow-x: auto; }
 .plan-seg button { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; padding: 4px 10px; min-height: 30px; }
 .plan-seg .pbar { width: 3px; height: 12px; border-radius: 2px; background: var(--c); }
+.plan-seg button[aria-pressed="true"] {
+  --chatgpt: var(--chatgpt-light);
+  --claude: var(--claude-light);
+  --google: var(--google-light);
+}
 .picks { display: grid; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
 .pick {
   font: inherit; color: var(--ink); text-align: left; cursor: pointer; background: none; border: 0;
@@ -343,6 +541,7 @@ svg .thresh-line { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 4 3;
   display: grid; align-content: stretch; gap: 0; flex-wrap: nowrap;
   background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden;
 }
+.legend .kdot { stroke: var(--surface); }
 .krow { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-items: center; gap: 8px; min-height: 44px; padding: 6px 12px 6px 15px; }
 .krow + .krow { border-top: 1px solid var(--grid); }
 .legend .plans { margin: 0; padding: 0; border: 0; flex-wrap: wrap; gap: 4px 12px; }
@@ -362,3 +561,12 @@ svg .thresh-line { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 4 3;
 .health .why p { margin: 4px 0; }
 .health pre { margin: 6px 0; padding: 8px 10px; background: var(--hover); border-radius: 6px; overflow-x: auto; font-size: 12px; }
 .health pre code { background: none; padding: 0; word-break: normal; white-space: pre; }
+
+@media (forced-colors: active) {
+  .seg button[aria-pressed="true"],
+  .lane-head button[aria-pressed="true"] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+  .tip { border: 1px solid CanvasText; }
+}
