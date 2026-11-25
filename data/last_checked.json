@@ -1,15 +1,15 @@
 {
- "date": "2026-11-24",
- "checked_at": "2026-11-25T00:06:29Z",
+ "date": "2026-11-25",
+ "checked_at": "2026-11-25T09:07:37Z",
  "tier": "free",
  "intelligence_index_version": 5,
- "fingerprint": "sha256:80d46060610dd3721c6d6b5b946fe9ebd8227bd374cf258cab68eb56fed6aa17",
- "snapshot_written": "2026-11-24.json",
+ "fingerprint": "sha256:09f73714c5a9b375df6d84ea88a66adaa4f1f5c65872f26ba5663605f8013fe4",
+ "snapshot_written": "2026-11-25.json",
  "records_total": 766,
  "records_kept": 84,
  "rate_limit": {
   "X-Ratelimit-Limit": "100",
-  "X-Ratelimit-Remaining": "88",
-  "X-Ratelimit-Reset": "1795574082"
+  "X-Ratelimit-Remaining": "96",
+  "X-Ratelimit-Reset": "1795684058"
  }
 }
